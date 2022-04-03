@@ -13,3 +13,8 @@ API Endpoints:
 3. Edit tweet (only tweet text)
 4. Delete tweet
 5. Refresh latest tweets in DB (Syncing tweets to DB)
+
+TODO:
+[ ] Add unit tests
+[ ] Add proper typescript types where required/missing
+[ ] Input validation using Joi
