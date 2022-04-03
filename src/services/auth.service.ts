@@ -1,5 +1,5 @@
 import { sign } from 'jsonwebtoken';
-import { SECRET_KEY } from '@config';
+import { CALLBACK_URL, CONSUMER_KEY, CONSUMER_SECRET, SECRET_KEY } from '@config';
 import { HttpException } from '@exceptions/HttpException';
 import { DataStoredInToken, TokenData } from '@interfaces/auth.interface';
 import { User } from '@interfaces/users.interface';
@@ -12,13 +12,9 @@ import userService from '@services/users.service';
 class AuthService {
   public users = userModel;
   public userService = new userService();
-  public CONSUMER_KEY = 'TpqVvXT9oZmklCsotvA2PjdOU';
-  public CONSUMER_SECRET = 'UV4rb4fcf4HKiWTBegn1X8dn3xecNzgcYvDkFwFSL1Dbitx2ie';
-  public CALLBACK_URL = "http://www.localhost:3000/callback";
-
 
   public createToken(user: User): TokenData {
-    const dataStoredInToken: DataStoredInToken = { _id: user._id };
+    const dataStoredInToken: DataStoredInToken = { _id: user._id, userName: user.userName };
     const secretKey: string = SECRET_KEY;
     const expiresIn: number = 60 * 60;
 
@@ -31,11 +27,11 @@ class AuthService {
 
   public async twitterAuth(): Promise<{ url: string, oauth_token: string; oauth_token_secret: string }> {
     const client = new TwitterApi({
-      appKey: this.CONSUMER_KEY,
-      appSecret: this.CONSUMER_SECRET,
+      appKey: CONSUMER_KEY,
+      appSecret: CONSUMER_SECRET,
     });
 
-    const response = await client.generateAuthLink(this.CALLBACK_URL);
+    const response = await client.generateAuthLink(CALLBACK_URL);
     const { url, oauth_token, oauth_token_secret } = response;
     await redisClient.set(oauth_token, oauth_token_secret);
     return { url, oauth_token, oauth_token_secret };
@@ -46,15 +42,15 @@ class AuthService {
     if (!oauth_token_secret) throw new HttpException(400, "error: oauth_token_secret");
 
     const client = new TwitterApi({
-      appKey: this.CONSUMER_KEY,
-      appSecret: this.CONSUMER_SECRET,
+      appKey: CONSUMER_KEY,
+      appSecret: CONSUMER_SECRET,
       accessToken: oauth_token,
       accessSecret: oauth_token_secret,
     });
+    
+    const { accessToken, accessSecret, screenName, userId } = await client.login(oauth_verifier);
 
-    const { accessToken, accessSecret, screenName } = await client.login(oauth_verifier);
-
-    const savedUserInfo = await this.userService.saveUser({ userName: screenName, accessToken, accessSecret });
+    const savedUserInfo = await this.userService.saveUser({ userName: screenName, twitterUserId: userId, accessToken, accessSecret });
     
     const tokenData = this.createToken(savedUserInfo);
     return { token: tokenData.token, screenName };

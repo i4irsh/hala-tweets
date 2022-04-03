@@ -1,4 +1,3 @@
-import { hash } from 'bcrypt';
 import { CreateUserDto } from '@dtos/users.dto';
 import { HttpException } from '@exceptions/HttpException';
 import { User } from '@interfaces/users.interface';
@@ -25,8 +24,9 @@ class UserService {
   public async saveUser(userData: CreateUserDto): Promise<any> {
     const query = { userName: userData.userName };
     const update = { $set: { ...userData } };
-    const options = { upsert: true, returnNewDocument : true };
-    return await this.users.updateOne(query, update, options);
+    const options = { upsert: true };
+    await this.users.updateOne(query, update, options);
+    return await this.findUserByUserName(userData.userName);
   }
 }
 

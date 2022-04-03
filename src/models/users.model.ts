@@ -7,14 +7,19 @@ const userSchema: Schema = new Schema({
     required: true,
     unique: true,
   },
-  accessToken: {
+  twitterUserId: {
     type: String,
     required: true,
+    unique: true,
+  },
+  accessToken: {
+    type: String,
+    required: false,
     unique: false,
   },
   accessSecret: {
     type: String,
-    required: true,
+    required: false,
     unique: false,
   },
 });

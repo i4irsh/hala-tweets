@@ -1,0 +1,17 @@
+# baseURL
+@baseURL = http://localhost:3000
+
+###
+# Fetch User Tweets
+GET {{ baseURL }}/tweets
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MjQ5OWE4NDFiMjMzYjU3ZjhjNzU2YWYiLCJ1c2VyTmFtZSI6Imk0aXJzaCIsImlhdCI6MTY0OTAwMzAwOCwiZXhwIjoxNjQ5MDA2NjA4fQ.BCWTIhYUUO4G7uXif73WesqM8uV6rXyg0SHaylfMrwo
+
+###
+# Fetch Single Tweet By ID
+GET {{ baseURL }}/tweets/1510654495663009792
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MjQ5OWE4NDFiMjMzYjU3ZjhjNzU2YWYiLCJ1c2VyTmFtZSI6Imk0aXJzaCIsImlhdCI6MTY0OTAwMzAwOCwiZXhwIjoxNjQ5MDA2NjA4fQ.BCWTIhYUUO4G7uXif73WesqM8uV6rXyg0SHaylfMrwo
+
+###
+# Delete Tweet By ID (owned)
+DELETE {{ baseURL }}/tweets/1510654495663009792
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MjQ5OWE4NDFiMjMzYjU3ZjhjNzU2YWYiLCJ1c2VyTmFtZSI6Imk0aXJzaCIsImlhdCI6MTY0OTAwMzAwOCwiZXhwIjoxNjQ5MDA2NjA4fQ.BCWTIhYUUO4G7uXif73WesqM8uV6rXyg0SHaylfMrwo
